@@ -10,6 +10,7 @@ class TodosController < ApplicationController
 
   # GET /todos/1
   def show
+    # @todo = Todo.find(params[:id])
     render json: @todo
   end
 
