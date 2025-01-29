@@ -7,3 +7,21 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+ApplicationRecord.transaction do
+  Todo.delete_all
+
+  Todo.create!([
+    {  
+      title: "Todo 1", 
+      content: "Todo 1 の内容"
+    },
+    {
+      title: "Todo 2",
+      content: "Todo 2 の内容"
+    },
+    {
+      title: "Todo 3",
+      content: "Todo 3 の内容"
+    }
+  ])
+end
