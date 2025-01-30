@@ -27,6 +27,7 @@ class TodosController < ApplicationController
 
   # PATCH/PUT /todos/1
   def update
+    @todo = Todo.find(params[:id])
     if @todo.update(todo_params)
       render json: @todo
     else
