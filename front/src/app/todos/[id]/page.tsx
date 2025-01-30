@@ -2,6 +2,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Todo } from "@/types/Todo";
+import Link from "next/link";
 
 export default function Page() { 
   const currentPath = usePathname();
@@ -18,6 +19,8 @@ export default function Page() {
   return (
     <div>
       {todo?.title}
+      {todo?.content}
+      <Link href="/todos">一覧に戻る</Link>
     </div>
   );
 }
