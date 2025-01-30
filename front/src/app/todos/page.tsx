@@ -1,37 +1,37 @@
 "use client";
 
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import { Todo } from "@/types/Todo";
+import React, { useCallback, useEffect, useState } from 'react';
+import { Todo } from "@/interfaces/index";
 
 export default function Page() { 
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [title, setTitle] = useState<string>('');
-  const [content, setContent] = useState<string>('');
-  const fetchTodos = async () => {
+  // const [title, setTitle] = useState<string>('');
+  // const [content, setContent] = useState<string>('');
+  const fetchTodos = useCallback(async () => {
     const response = await fetch('http://localhost:3000/todos');
-    const todos: Todo[] = await response.json();
+    const todos = await response.json();
     setTodos(todos);
-  }
-  const handleSubmit = async (e: React.FormEvent) => { 
-    e.preventDefault();
-    fetch('http://localhost:3000/todos', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ title, content }),
-    }).then(() => {
-      fetchTodos();
-      setTitle('');
-      setContent('');
-    }).catch((error) => {
-      console.error('Error:', error);
-     });
-  };
+  }, []);
+  // const handleSubmit = async (e: React.FormEvent) => { 
+  //   e.preventDefault();
+  //   fetch('http://localhost:3000/todos', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ title, content }),
+  //   }).then(() => {
+  //     fetchTodos();
+  //     setTitle('');
+  //     setContent('');
+  //   }).catch((error) => {
+  //     console.error('Error:', error);
+  //    });
+  // };
   useEffect(() => { 
     fetchTodos();
-  }, []);
+  }, [fetchTodos]);
   return (
     <div>
       <h1>Todo一覧</h1>
@@ -45,7 +45,7 @@ export default function Page() {
         );
       }
       )}
-      <div>
+      {/* <div>
         <form
           action=""
           onSubmit={handleSubmit}
@@ -69,7 +69,7 @@ export default function Page() {
             className="" />
           <button type="submit">送信</button>
         </form>
-      </div>
+      </div> */}
     </div>
   );
 }

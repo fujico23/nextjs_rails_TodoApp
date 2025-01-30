@@ -1,7 +1,7 @@
 "use client";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Todo } from "@/types/Todo";
+import { Todo } from "@/interfaces/index";
 import Link from "next/link";
 
 export default function Page() { 
