@@ -52,7 +52,7 @@ export const useFetchTodo = () => {
       setError(error instanceof Error ? error : new Error(String(error)));
     }
     setLoading(false);
-  }, []);
+  }, [id]);
   
   useEffect(() => {
     fetchTodo();
