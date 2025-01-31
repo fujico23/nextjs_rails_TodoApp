@@ -2,13 +2,13 @@
 import Link from 'next/link';
 import { useFetchTodos } from "@/app/lib/action";
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 
 export default function Page() { 
   const { todos, loading, error } = useFetchTodos();
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
-  const router = useRouter();
+  // const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,10 +23,11 @@ export default function Page() {
       )
       setTitle('')
       setContent('')
-      router.refresh();
+      // router.refresh();
+      window.location.reload();
     } catch (error) {
       console.error('Error:', error);
-      router.push('/');
+      // router.push('/');
     }
   };
 
