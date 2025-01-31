@@ -1,18 +1,13 @@
 "use client";
 
 import Link from 'next/link';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Todo } from "@/interfaces/index";
+import { useFetchTodos } from "@/app/lib/action";
 
 export default function Page() { 
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const { todos } = useFetchTodos();
   // const [title, setTitle] = useState<string>('');
   // const [content, setContent] = useState<string>('');
-  const fetchTodos = useCallback(async () => {
-    const response = await fetch('http://localhost:3000/todos');
-    const todos = await response.json();
-    setTodos(todos);
-  }, []);
+
   // const handleSubmit = async (e: React.FormEvent) => { 
   //   e.preventDefault();
   //   fetch('http://localhost:3000/todos', {
@@ -29,9 +24,7 @@ export default function Page() {
   //     console.error('Error:', error);
   //    });
   // };
-  useEffect(() => { 
-    fetchTodos();
-  }, [fetchTodos]);
+
   return (
     <div>
       <h1>Todo一覧</h1>
