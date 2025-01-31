@@ -1,6 +1,6 @@
 "use client";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Todo } from "@/interfaces/index";
 import Link from "next/link";
 
@@ -8,15 +8,16 @@ export default function Page() {
   const currentPath = usePathname();
   const id = currentPath.split("/")[2];
   const [todo, setTodo] = useState<Todo | null>(null);
-
-  const fetchTodos = async () => {
+  
+  const fetchTodos = useCallback(async () => {
     const res = await fetch(`http://localhost:3000/todos/${id}`);
     const todo = await res.json();
     setTodo(todo);
-  } 
+  }, []);
   useEffect(() => { 
     fetchTodos();
   }, [id]);
+  
   return (
     <div>
       {todo?.title}
