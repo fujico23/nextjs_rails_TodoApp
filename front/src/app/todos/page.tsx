@@ -4,11 +4,11 @@ import Link from 'next/link';
 import { useFetchTodos } from "@/app/lib/action";
 
 export default function Page() { 
-  const { todos } = useFetchTodos();
+  const { todos, loading, error } = useFetchTodos();
   // const [title, setTitle] = useState<string>('');
   // const [content, setContent] = useState<string>('');
 
-  // const handleSubmit = async (e: React.FormEvent) => { 
+  // const handleSubmit = async (e: React.FormEvent) => {
   //   e.preventDefault();
   //   fetch('http://localhost:3000/todos', {
   //     method: 'POST',
@@ -24,6 +24,9 @@ export default function Page() {
   //     console.error('Error:', error);
   //    });
   // };
+  if (loading) return <div>loading...</div>;
+  if (error) return <div>{error.message}というエラーが発生しています！</div>;
+  if (todos.length === 0) return <div>データがありません</div>;
 
   return (
     <div>

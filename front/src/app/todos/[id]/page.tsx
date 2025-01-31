@@ -1,27 +1,18 @@
 "use client";
-import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { Todo } from "@/interfaces/index";
 import Link from "next/link";
+import { useFetchTodo } from "@/app/lib/action";
 
 export default function Page() { 
-  const currentPath = usePathname();
-  const id = currentPath.split("/")[2];
-  const [todo, setTodo] = useState<Todo | null>(null);
-  
-  const fetchTodos = useCallback(async () => {
-    const res = await fetch(`http://localhost:3000/todos/${id}`);
-    const todo = await res.json();
-    setTodo(todo);
-  }, []);
-  useEffect(() => { 
-    fetchTodos();
-  }, [id]);
-  
+  const { todo, loading, error, id } = useFetchTodo();
+
+  if (loading) return <div>loading...</div>;
+  if (error) return <div>{error.message}というエラーが発生しています！</div>;
+  if (!todo) return <div>データがありません</div>;
+
   return (
     <div>
-      {todo?.title}
-      {todo?.content}
+      {todo.title}
+      {todo.content}
       <Link href={`/todos/${id}/edit`}>編集</Link>
     </div>
   );
