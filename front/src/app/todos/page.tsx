@@ -1,68 +1,64 @@
 "use client";
-
 import Link from 'next/link';
-import { useFetchTodos } from "@/app/lib/action";
+import { useCreateTodo, useFetchTodos } from "@/app/lib/action";
+// import { useRouter } from 'next/navigation';
 
 export default function Page() { 
-  const { todos } = useFetchTodos();
-  // const [title, setTitle] = useState<string>('');
-  // const [content, setContent] = useState<string>('');
+  const { todos, loading, error } = useFetchTodos();
+  const { title, setTitle, content, setContent, loading: createLoading, error: createError, handleSubmit } = useCreateTodo();
+  // const router = useRouter();
 
-  // const handleSubmit = async (e: React.FormEvent) => { 
-  //   e.preventDefault();
-  //   fetch('http://localhost:3000/todos', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ title, content }),
-  //   }).then(() => {
-  //     fetchTodos();
-  //     setTitle('');
-  //     setContent('');
-  //   }).catch((error) => {
-  //     console.error('Error:', error);
-  //    });
-  // };
+  if (loading) return <div>loading...</div>;
+  if (error) return <div>{error.message}というエラーが発生しています！</div>;
+  if (createLoading) return <div>データ反映中</div>;
+  if (createError) return <div>{createError.message}というエラーが発生しています！</div>;
+  if (todos.length === 0) return <div>データがありません</div>;
 
   return (
     <div>
       <h1>Todo一覧</h1>
       {todos.map((todo) => {
         return (
-          <div key={todo.id}>
-            <h2>{todo.title}</h2>
-            <p>{todo.content}</p>
-            <Link href={`/todos/${todo.id}`}>詳細</Link>
+          <div key={todo.id}
+          className="flex justify-between items-center bg-red-100 m-1">
+            <h2 className="text-xs">{todo.title}</h2>
+            <p className="text-xs">{todo.content}</p>
+            <Link
+              href={`/todos/${todo.id}`}
+              className="text-xs"
+            >詳細</Link>
           </div>
         );
       }
       )}
-      {/* <div>
-        <form
-          action=""
-          onSubmit={handleSubmit}
-        >
-          <label htmlFor="title">Title</label>
+      <div>
+        <form onSubmit={handleSubmit}
+          className="flex flex-col justify-center items-center">
+          <label htmlFor="title">TItle</label>
           <input
             type="text"
             name="title"
             id="title"
-            placeholder='タイトル'
-            onChange={(e) => setTitle(e.target.value)}
             value={title}
-            className="" />
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Title"
+            className="m-1 border border-gray-300"
+          />
           <label htmlFor="content">Content</label>
           <textarea
-            name="content"
-            id="content"
-            placeholder=''
+            name='content'
+            id='content'
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="" />
-          <button type="submit">送信</button>
+            placeholder="Content"
+            className="m-1 border border-gray-300"
+          />
+          <button
+            type="submit"
+            className="m-1 bg-blue-500 text-white hover:bg-blue-700"
+          >Add Todo</button>
         </form>
-      </div> */}
+      </div>
     </div>
   );
 }
