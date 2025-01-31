@@ -1,38 +1,17 @@
 "use client";
 import Link from 'next/link';
-import { useFetchTodos } from "@/app/lib/action";
-import { useState } from 'react';
+import { useCreateTodo, useFetchTodos } from "@/app/lib/action";
 // import { useRouter } from 'next/navigation';
 
 export default function Page() { 
   const { todos, loading, error } = useFetchTodos();
-  const [title, setTitle] = useState<string>('');
-  const [content, setContent] = useState<string>('');
+  const { title, setTitle, content, setContent, loading: createLoading, error: createError, handleSubmit } = useCreateTodo();
   // const router = useRouter();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try { 
-      await fetch('http://localhost:3000/todos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ title, content }),
-      },
-      )
-      setTitle('')
-      setContent('')
-      // router.refresh();
-      window.location.reload();
-    } catch (error) {
-      console.error('Error:', error);
-      // router.push('/');
-    }
-  };
 
   if (loading) return <div>loading...</div>;
   if (error) return <div>{error.message}というエラーが発生しています！</div>;
+  if (createLoading) return <div>データ反映中</div>;
+  if (createError) return <div>{createError.message}というエラーが発生しています！</div>;
   if (todos.length === 0) return <div>データがありません</div>;
 
   return (

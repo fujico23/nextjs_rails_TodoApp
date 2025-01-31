@@ -60,3 +60,34 @@ export const useFetchTodo = () => {
 
   return { todo, fetchTodo, loading, error, id };
 }
+
+// Todoを作成するカスタムフック
+export const useCreateTodo = () => {
+  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await fetch('http://localhost:3000/todos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title, content }),
+      });
+      setTitle('');
+      setContent('');
+      window.location.reload();
+    } catch (error) {
+      console.error('Error:', error);
+      setError(error instanceof Error ? error : new Error(String(error)));
+    }
+    setLoading(false);
+  };
+
+  return { title, setTitle, content, setContent, loading, error, handleSubmit };
+}
