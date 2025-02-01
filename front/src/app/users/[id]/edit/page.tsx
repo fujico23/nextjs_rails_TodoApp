@@ -1,4 +1,4 @@
-"user client";
+"use client";
 import { useFetchUser } from "@/app/lib/userAction";
 import { useEffect, useState } from "react";
 
@@ -9,7 +9,7 @@ export default function Page() {
 
   useEffect(() => {
     setName(user.name);
-    setTel(user.tel.toString()); // tel を文字列として管理
+    setTel(user.tel.toString());
   }, [user]);
 
   return (
