@@ -1,27 +1,31 @@
 "use client";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Todo } from "@/interfaces/index";
 import Link from "next/link";
+import { useFetchTodo } from "@/app/lib/action";
 
 export default function Page() { 
-  const currentPath = usePathname();
-  const id = currentPath.split("/")[2];
-  const [todo, setTodo] = useState<Todo | null>(null);
+  const { todo, loading, error, id } = useFetchTodo();
 
-  const fetchTodos = async () => {
-    const res = await fetch(`http://localhost:3000/todos/${id}`);
-    const todo = await res.json();
-    setTodo(todo);
-  } 
-  useEffect(() => { 
-    fetchTodos();
-  }, [id]);
+  if (loading) return <div>loading...</div>;
+  if (error) return <div>{error.message}というエラーが発生しています！</div>;
+  if (!todo) return <div>データがありません</div>;
+
   return (
-    <div>
-      {todo?.title}
-      {todo?.content}
-      <Link href={`/todos/${id}/edit`}>編集</Link>
+    <div className="flex items-center justify-center flex-col w-96 
+    h-96 mx-auto my-auto p-4 bg-white shadow-lg rounded-lg">
+      <h1 className="text-3xl pb-2">{todo.title}</h1>
+      <p className="text-xl">{todo.content}</p>
+      <Link
+        href={`/todos/${id}/edit`}
+        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+      >
+        編集
+      </Link>
+      <Link
+        href="/todos"
+        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+      >
+        TOP一覧
+      </Link>
     </div>
   );
 }

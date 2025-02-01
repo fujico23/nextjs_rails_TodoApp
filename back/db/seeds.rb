@@ -9,6 +9,7 @@
 #   end
 ApplicationRecord.transaction do
   Todo.delete_all
+  User.delete_all
 
   Todo.create!([
     {  
@@ -22,6 +23,20 @@ ApplicationRecord.transaction do
     {
       title: "Todo 3",
       content: "Todo 3 の内容"
+    }
+  ])
+  User.create!([
+    {  
+      name: "sayaka", 
+      tel: "0123456789",
+    },
+    {
+      name: "taro",
+      tel: "999999999"
+    },
+    {
+      name: "hanako",
+      tel: "9876543210"
     }
   ])
 end
