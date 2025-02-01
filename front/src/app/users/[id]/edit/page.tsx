@@ -9,7 +9,7 @@ export default function Page() {
   useEffect(() => {
     setName(user.name);
     setTel(user.tel.toString());
-  }, [user]);
+  }, [user, setName, setTel]);
 
   return (
     <div>
