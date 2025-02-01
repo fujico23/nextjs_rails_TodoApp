@@ -1,12 +1,38 @@
 "use client";
 import Link from 'next/link';
 import { useCreateTodo, useFetchTodos } from "@/app/lib/action";
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function Page() { 
-  const { todos, loading, error } = useFetchTodos();
+  const { todos, loading, error, setTodos  } = useFetchTodos();
   const { title, setTitle, content, setContent, loading: createLoading, error: createError, handleSubmit } = useCreateTodo();
-  // const router = useRouter();
+  const router = useRouter();
+
+  const removeTodo = (id: number) => {
+    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+  };
+
+  const handleDelete = async(id: number) => {
+    if (!confirm('削除しますか？')) {
+      return;
+    }
+    try {
+      const res = await fetch(`http://localhost:3000/todos/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (res.ok) {
+        removeTodo(id);
+      } else {
+        throw new Error('エラーが発生しました');
+      }
+      router.push('/todos');
+    } catch (error) { 
+      console.error(error);      
+    }
+  }
 
   if (loading) return <div>loading...</div>;
   if (error) return <div>{error.message}というエラーが発生しています！</div>;
@@ -26,7 +52,10 @@ export default function Page() {
             <Link
               href={`/todos/${todo.id}`}
               className="text-xs"
-            >詳細</Link>
+            >
+              詳細
+            </Link>
+              <button onClick={() => handleDelete(todo.id)}>削除</button>
           </div>
         );
       }
