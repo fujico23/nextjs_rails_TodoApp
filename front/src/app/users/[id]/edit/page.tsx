@@ -1,11 +1,10 @@
 "use client";
-import { useFetchUser } from "@/app/lib/userAction";
-import { useEffect, useState } from "react";
+import { useFetchUser, useFetchUserEdit } from "@/app/lib/userAction";
+import { useEffect } from "react";
 
 export default function Page() {
   const { user } = useFetchUser();
-  const [name, setName] = useState<string>("");
-  const [tel, setTel] = useState<string>("");
+  const { name, tel, setName, setTel, handleUserEdit } = useFetchUserEdit();
 
   useEffect(() => {
     setName(user.name);
@@ -14,7 +13,7 @@ export default function Page() {
 
   return (
     <div>
-      <form>
+      <form onSubmit={handleUserEdit}>
         <label htmlFor="name">Name</label>
         <input
           type="text"
