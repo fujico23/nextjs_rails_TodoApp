@@ -27,8 +27,12 @@ export const useFetchTodos = () => {
   useEffect(() => {
     fetchTodos();
   }, [fetchTodos]);
+
+  // const removeTodo = (id: number) => {
+  //   setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+  // };
   
-  return { todos, fetchTodos, loading, error };
+  return { todos, setTodos, fetchTodos, loading, error};
 }
 
 // Todo詳細を取得するカスタムフック
@@ -155,3 +159,4 @@ export const usePutTodo = () => {
   }
   return { title, setTitle, content, setContent, loading, setLoading, error, setError,handleEditForm };
 }
+
