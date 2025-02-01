@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { User } from "@/interfaces/index";
 
 // ユーザー一覧を取得するカスタムフック
@@ -48,4 +48,37 @@ export const useFetchUser = () => {
     fetchUser();
   }, [fetchUser]);
   return { user, fetchUser };
+}
+
+// ユーザーを更新するカスタムフック
+export const useFetchUserEdit = () => {
+  const { user } = useFetchUser();
+  const [name, setName] = useState<string>("");
+  const [tel, setTel] = useState<string>("");
+  const router = useRouter();
+
+  useEffect(() => {
+    setName(user.name);
+    setTel(user.tel.toString());
+  }, [user]);
+
+  const handleUserEdit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const res = await fetch(`http://localhost:3000/users/${user.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, tel }),
+      })
+      if (!res.ok) {
+        throw new Error('エラーが発生しました');
+      }
+      router.push('/users');
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  return { name, tel, setName, setTel, handleUserEdit };
 }
